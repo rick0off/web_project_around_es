@@ -28,3 +28,52 @@ const initialCards = [
 initialCards.forEach((card) => {
   console.log(card.name);
 });
+
+//Segunda parte del proyecto 6
+
+const editProfileButton = document.querySelector(".profile__edit-button");
+const editModal = document.querySelector("#edit-popup");
+const closeEditButton = editModal.querySelector(".popup__close");
+
+const profileForm = editModal.querySelector(".popup__form");
+
+const profileName = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+
+const inputName = editModal.querySelector(".popup__input_type_name");
+const inputDescription = editModal.querySelector(
+  ".popup__input_type_description",
+);
+
+function openModal(modal) {
+  modal.classList.add("popup_is-opened");
+}
+
+function closeModal(modal) {
+  modal.classList.remove("popup_is-opened");
+}
+
+function fillProfileForm() {
+  inputName.value = profileName.textContent;
+  inputDescription.value = profileDescription.textContent;
+}
+
+function handleOpenEditModal() {
+  fillProfileForm();
+  openModal(editModal);
+}
+
+function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+  profileName.textContent = inputName.value;
+  profileDescription.textContent = inputDescription.value;
+  closeModal(editModal);
+}
+
+editProfileButton.addEventListener("click", handleOpenEditModal);
+
+closeEditButton.addEventListener("click", () => {
+  closeModal(editModal);
+});
+
+profileForm.addEventListener("submit", handleProfileFormSubmit);
