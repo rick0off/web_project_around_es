@@ -92,19 +92,19 @@ function handleProfileFormSubmit(evt) {
 // funciones de tarjetas
 
 function getCardElement(data) {
-  const cardElement = cardTemplate.querySelector(".element").cloneNode(true);
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
 
-  const cardImage = cardElement.querySelector(".element__image");
-  const cardTitle = cardElement.querySelector(".element__title");
-  const likeButton = cardElement.querySelector(".element__like-button");
-  const deleteButton = cardElement.querySelector(".element__delete-button");
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
+  const likeButton = cardElement.querySelector(".card__like-button");
+  const deleteButton = cardElement.querySelector(".card__delete-button");
 
   cardTitle.textContent = data.name || "Sin título";
   cardImage.src = data.link || "./images/placeholder.jpg";
   cardImage.alt = data.name || "Sin título";
 
   likeButton.addEventListener("click", () => {
-    likeButton.classList.toggle("element__like-button_active");
+    likeButton.classList.toggle("card__like-button_active");
   });
 
   deleteButton.addEventListener("click", () => {
