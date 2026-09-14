@@ -9,3 +9,31 @@
 @import url("../blocks/cards.css");
 @import url("../blocks/card.css");
 @import url("../blocks/popup.css");
+
+// estilo de formulario //
+
+.popup__input_type_error {
+  border-bottom-color: #ff0000;
+}
+
+.popup__error {
+  font-size: 12px;
+  line-height: 15px;
+  color: #ff0000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: block;
+  margin-top: 5px;
+}
+
+.popup__error_visible {
+  opacity: 1;
+}
+
+.popup__button_disabled {
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: default;
+  pointer-events: none;
+}
