@@ -47,9 +47,7 @@ const cardModal = document.querySelector("#add-card-popup");
 const closeCardButton = cardModal.querySelector(".popup__close");
 const cardForm = cardModal.querySelector(".popup__form");
 
-const inputCardName = cardModal.querySelector(
-  ".popup__input_type_card-name",
-);
+const inputCardName = cardModal.querySelector(".popup__input_type_card-name");
 const inputCardLink = cardModal.querySelector(".popup__input_type_url");
 
 // Elementos de la ventana de imagen
@@ -120,9 +118,7 @@ function handleProfileFormSubmit(evt) {
 
 // Crear elemento de tarjeta
 function getCardElement(data) {
-  const cardElement = cardTemplate
-    .querySelector(".card")
-    .cloneNode(true);
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
 
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -215,133 +211,3 @@ enableValidation({
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 });
-3. validate.js
-
-Este sería el archivo encargado únicamente de la validación.
-
-const showInputError = (
-  formElement,
-  inputElement,
-  errorMessage,
-  config,
-) => {
-  const errorElement = formElement.querySelector(
-    `.${inputElement.name}-input-error`,
-  );
-
-  inputElement.classList.add(config.inputErrorClass);
-
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add(config.errorClass);
-};
-
-const hideInputError = (
-  formElement,
-  inputElement,
-  config,
-) => {
-  const errorElement = formElement.querySelector(
-    `.${inputElement.name}-input-error`,
-  );
-
-  inputElement.classList.remove(config.inputErrorClass);
-
-  errorElement.classList.remove(config.errorClass);
-  errorElement.textContent = "";
-};
-
-const checkInputValidity = (
-  formElement,
-  inputElement,
-  config,
-) => {
-  if (!inputElement.validity.valid) {
-    showInputError(
-      formElement,
-      inputElement,
-      inputElement.validationMessage,
-      config,
-    );
-  } else {
-    hideInputError(
-      formElement,
-      inputElement,
-      config,
-    );
-  }
-};
-
-const hasInvalidInput = (inputList) => {
-  return inputList.some((inputElement) => {
-    return !inputElement.validity.valid;
-  });
-};
-
-const toggleButtonState = (
-  inputList,
-  buttonElement,
-  config,
-) => {
-  if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(
-      config.inactiveButtonClass,
-    );
-
-    buttonElement.disabled = true;
-  } else {
-    buttonElement.classList.remove(
-      config.inactiveButtonClass,
-    );
-
-    buttonElement.disabled = false;
-  }
-};
-
-export const setEventListeners = (
-  formElement,
-  config,
-) => {
-  const inputList = Array.from(
-    formElement.querySelectorAll(
-      config.inputSelector,
-    ),
-  );
-
-  const buttonElement = formElement.querySelector(
-    config.submitButtonSelector,
-  );
-
-  toggleButtonState(
-    inputList,
-    buttonElement,
-    config,
-  );
-
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener("input", () => {
-      checkInputValidity(
-        formElement,
-        inputElement,
-        config,
-      );
-
-      toggleButtonState(
-        inputList,
-        buttonElement,
-        config,
-      );
-    });
-  });
-};
-
-export const enableValidation = (config) => {
-  const formList = Array.from(
-    document.querySelectorAll(
-      config.formSelector,
-    ),
-  );
-
-  formList.forEach((formElement) => {
-    setEventListeners(formElement, config);
-  });
-};

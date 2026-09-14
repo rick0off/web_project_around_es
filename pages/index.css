@@ -10,7 +10,7 @@
 @import url("../blocks/card.css");
 @import url("../blocks/popup.css");
 
-// estilo de formulario //
+/*estilo de formulario* /
 
 .popup__input_type_error {
   border-bottom-color: #ff0000;
