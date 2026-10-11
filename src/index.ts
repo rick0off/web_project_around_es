@@ -1,10 +1,10 @@
-import { Card, CardData } from "./Card";
-import { Section } from "./Section";
-import { PopupWithImage } from "./PopupWithImage";
-import { PopupWithForm } from "./PopupWithForm";
-import { UserInfo } from "./UserInfo";
-import { FormValidator } from "./FormValidator";
-import { defaultFormConfig } from "./utils/constants";
+import { Card, CardData } from "./Card.js";
+import { Section } from "./Section.js";
+import { PopupWithImage } from "./PopupWithImage.js";
+import { PopupWithForm } from "./PopupWithForm.js";
+import { UserInfo } from "./UserInfo.js";
+import { FormValidator } from "./FormValidator.js";
+import { defaultFormConfig } from "./utils/constants.js";
 
 const initialCards: CardData[] = [
   {
