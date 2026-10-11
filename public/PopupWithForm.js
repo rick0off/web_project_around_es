@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PopupWithForm = void 0;
-const Popup_js_1 = require("./Popup.js");
-class PopupWithForm extends Popup_js_1.Popup {
+import { Popup } from "./Popup.js";
+export class PopupWithForm extends Popup {
     constructor(popupSelector, handleFormSubmit) {
         super(popupSelector);
         this._handleFormSubmit = handleFormSubmit;
@@ -28,4 +25,3 @@ class PopupWithForm extends Popup_js_1.Popup {
         this._form.reset();
     }
 }
-exports.PopupWithForm = PopupWithForm;

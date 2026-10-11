@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Section = void 0;
-class Section {
+export class Section {
     constructor({ items, renderer }, containerSelector) {
         this._items = items;
         this._renderer = renderer;
@@ -16,4 +13,3 @@ class Section {
         this._container.prepend(element);
     }
 }
-exports.Section = Section;

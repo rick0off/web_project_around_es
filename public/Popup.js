@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Popup = void 0;
-class Popup {
+export class Popup {
     constructor(popupSelector) {
         this._popupElement = document.querySelector(popupSelector);
         this._handleEscClose = (evt) => {
@@ -27,4 +24,3 @@ class Popup {
         });
     }
 }
-exports.Popup = Popup;

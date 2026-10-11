@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Card = void 0;
-class Card {
+export class Card {
     constructor(data, templateSelector, handleCardClick) {
         this._name = data.name;
         this._link = data.link;
@@ -43,4 +40,3 @@ class Card {
         return this._element;
     }
 }
-exports.Card = Card;

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserInfo = void 0;
-class UserInfo {
+export class UserInfo {
     constructor({ nameSelector, aboutSelector }) {
         this._nameElement = document.querySelector(nameSelector);
         this._aboutElement = document.querySelector(aboutSelector);
@@ -19,4 +16,3 @@ class UserInfo {
             this._aboutElement.textContent = about;
     }
 }
-exports.UserInfo = UserInfo;

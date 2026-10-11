@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.enableValidation = exports.setEventListeners = void 0;
 const showInputError = (formElement, inputElement, errorMessage, config) => {
     const errorElement = formElement.querySelector(`.${inputElement.name}-input-error`);
     inputElement.classList.add(config.inputErrorClass);
@@ -36,7 +33,7 @@ const toggleButtonState = (inputList, buttonElement, config) => {
         buttonElement.disabled = false;
     }
 };
-const setEventListeners = (formElement, config) => {
+export const setEventListeners = (formElement, config) => {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     const buttonElement = formElement.querySelector(config.submitButtonSelector);
     toggleButtonState(inputList, buttonElement, config);
@@ -47,11 +44,9 @@ const setEventListeners = (formElement, config) => {
         });
     });
 };
-exports.setEventListeners = setEventListeners;
-const enableValidation = (config) => {
+export const enableValidation = (config) => {
     const formList = Array.from(document.querySelectorAll(config.formSelector));
     formList.forEach((formElement) => {
-        (0, exports.setEventListeners)(formElement, config);
+        setEventListeners(formElement, config);
     });
 };
-exports.enableValidation = enableValidation;

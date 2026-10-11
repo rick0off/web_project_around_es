@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FormValidator = void 0;
-class FormValidator {
+export class FormValidator {
     constructor(config, formElement) {
         this._config = config;
         this._formElement = formElement;
@@ -69,4 +66,3 @@ class FormValidator {
         });
     }
 }
-exports.FormValidator = FormValidator;

@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PopupWithImage = void 0;
-const Popup_js_1 = require("./Popup.js");
-class PopupWithImage extends Popup_js_1.Popup {
+import { Popup } from "./Popup.js";
+export class PopupWithImage extends Popup {
     constructor(popupSelector) {
         super(popupSelector);
         this._imageElement = this._popupElement.querySelector(".popup__image");
@@ -17,4 +14,3 @@ class PopupWithImage extends Popup_js_1.Popup {
         super.open();
     }
 }
-exports.PopupWithImage = PopupWithImage;

@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const validate_js_1 = require("./validate.js");
+import { enableValidation } from "./validate.js";
 const initialCards = [
     {
         name: "Valle de Yosemite",
@@ -161,7 +159,7 @@ closeImageButton.addEventListener("click", () => {
     closeModal(imageModal);
 });
 // Iniciar validación
-(0, validate_js_1.enableValidation)({
+enableValidation({
     formSelector: ".popup__form",
     inputSelector: ".popup__input",
     submitButtonSelector: ".popup__button",
