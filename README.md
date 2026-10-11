@@ -23,6 +23,8 @@ Plantillas HTML (<template>)
 Validación de formularios
 JavaScript modular (import / export)
 Git y GitHub
+TypeScript (Tipado estático y compilación de código).
+POO (Programación Orientada a Objetos): Arquitectura basada en clases independientes y reutilizables (`Card`, `Section`, `Popup`, `PopupWithImage`, `PopupWithForm`, `UserInfo`, `FormValidator`) con acoplamiento débil e implementación de herencia.
 
 ## Validación
 
