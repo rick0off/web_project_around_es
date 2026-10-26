@@ -105,6 +105,27 @@
           </form>
         </div>
       </div>
+      <div class="popup" id="avatar-popup">
+        <div class="popup__content">
+          <button
+            aria-label="Cerrar ventana emergente"
+            class="popup__close"
+            type="button"
+          ></button>
+          <h3 class="popup__title">Cambiar foto de perfil</h3>
+          <form class="popup__form" id="edit-avatar-form" novalidate>
+            <input
+              class="popup__input popup__input_type_url"
+              name="avatar"
+              placeholder="Enlace a la foto de perfil"
+              required
+              type="url"
+            />
+            <span class="popup__error avatar-input-error"></span>
+            <button class="button popup__button" type="submit">Guardar</button>
+          </form>
+        </div>
+      </div>
       <div class="popup" id="image-popup">
         <div class="popup__content popup__content_content_image">
           <button
