@@ -38,67 +38,99 @@ export class Api {
   }
 
   // 1. Obtener información del usuario (GET)
-  public getUserInfo(): Promise<UserData> {
-    return this._request<UserData>(`${this._baseUrl}/users/me`, {
-      headers: this._headers
-    });
+  public async getUserInfo(): Promise<UserData> {
+    try {
+      return await this._request<UserData>(`${this._baseUrl}/users/me`, {
+        headers: this._headers
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 2. Obtener tarjetas iniciales (GET)
-  public getInitialCards(): Promise<CardData[]> {
-    return this._request<CardData[]>(`${this._baseUrl}/cards`, {
-      headers: this._headers
-    });
+  public async getInitialCards(): Promise<CardData[]> {
+    try {
+      return await this._request<CardData[]>(`${this._baseUrl}/cards`, {
+        headers: this._headers
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 3. Actualizar perfil de usuario (PATCH)
-  public updateUserInfo(data: { name: string; about: string }): Promise<UserData> {
-    return this._request<UserData>(`${this._baseUrl}/users/me`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify(data)
-    });
+  public async updateUserInfo(data: { name: string; about: string }): Promise<UserData> {
+    try {
+      return await this._request<UserData>(`${this._baseUrl}/users/me`, {
+        method: "PATCH",
+        headers: this._headers,
+        body: JSON.stringify(data)
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 4. Agregar nueva tarjeta (POST)
-  public addCard(data: { name: string; link: string }): Promise<CardData> {
-    return this._request<CardData>(`${this._baseUrl}/cards`, {
-      method: "POST",
-      headers: this._headers,
-      body: JSON.stringify(data)
-    });
+  public async addCard(data: { name: string; link: string }): Promise<CardData> {
+    try {
+      return await this._request<CardData>(`${this._baseUrl}/cards`, {
+        method: "POST",
+        headers: this._headers,
+        body: JSON.stringify(data)
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 7. Eliminar tarjeta (DELETE)
-  public deleteCard(cardId: string): Promise<{ message: string }> {
-    return this._request<{ message: string }>(`${this._baseUrl}/cards/${cardId}`, {
-      method: "DELETE",
-      headers: this._headers
-    });
+  public async deleteCard(cardId: string): Promise<{ message: string }> {
+    try {
+      return await this._request<{ message: string }>(`${this._baseUrl}/cards/${cardId}`, {
+        method: "DELETE",
+        headers: this._headers
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 8. Dar "me gusta" a una tarjeta (PUT)
-  public likeCard(cardId: string): Promise<CardData> {
-    return this._request<CardData>(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: "PUT",
-      headers: this._headers
-    });
+  public async likeCard(cardId: string): Promise<CardData> {
+    try {
+      return await this._request<CardData>(`${this._baseUrl}/cards/${cardId}/likes`, {
+        method: "PUT",
+        headers: this._headers
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 8. Quitar "me gusta" a una tarjeta (DELETE)
-  public dislikeCard(cardId: string): Promise<CardData> {
-    return this._request<CardData>(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: "DELETE",
-      headers: this._headers
-    });
+  public async dislikeCard(cardId: string): Promise<CardData> {
+    try {
+      return await this._request<CardData>(`${this._baseUrl}/cards/${cardId}/likes`, {
+        method: "DELETE",
+        headers: this._headers
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 
   // 9. Actualizar foto de perfil / avatar (PATCH)
-  public updateAvatar(avatarUrl: string): Promise<UserData> {
-    return this._request<UserData>(`${this._baseUrl}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({ avatar: avatarUrl })
-    });
+  public async updateAvatar(avatarUrl: string): Promise<UserData> {
+    try {
+      return await this._request<UserData>(`${this._baseUrl}/users/me/avatar`, {
+        method: "PATCH",
+        headers: this._headers,
+        body: JSON.stringify({ avatar: avatarUrl })
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 }
