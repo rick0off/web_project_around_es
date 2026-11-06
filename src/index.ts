@@ -1,9 +1,10 @@
-import { Card, CardData } from "./Card.js";
-import { Section } from "./Section.js";
-import { PopupWithImage } from "./PopupWithImage.js";
-import { PopupWithForm } from "./PopupWithForm.js";
-import { UserInfo } from "./UserInfo.js";
-import { FormValidator } from "./FormValidator.js";
+import { Card, CardData } from "./components/Card.js";
+import { Section } from "./components/Section.js";
+import { PopupWithImage } from "./components/PopupWithImage.js";
+import { PopupWithForm } from "./components/PopupWithForm.js";
+import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
+import { UserInfo } from "./components/UserInfo.js";
+import { FormValidator } from "./components/FormValidator.js";
 import { defaultFormConfig } from "./utils/constants.js";
 import { Api } from "./components/Api.js";
 
@@ -22,9 +23,12 @@ const userInfo = new UserInfo({
   aboutSelector: ".profile__description"
 });
 
-// 3. Popup de imagen
+// 3. Popups
 const imagePopup = new PopupWithImage("#image-popup");
 imagePopup.setEventListeners();
+
+const confirmDeletePopup = new PopupWithConfirmation("#confirm-popup");
+confirmDeletePopup.setEventListeners();
 
 const handleCardClick = (name: string, link: string) => {
   imagePopup.open(name, link);
@@ -34,17 +38,56 @@ const handleCardClick = (name: string, link: string) => {
 let cardSection: Section<CardData>;
 let userId: string = "";
 
+// Función reutilizable para crear tarjetas (evita código duplicado)
+const createCard = (item: CardData): HTMLElement => {
+  const card = new Card(
+    item,
+    userId,
+    "#card-template",
+    handleCardClick,
+    (cardInstance) => {
+      // Manejador de Like / Dislike
+      const cardId = cardInstance.getId();
+      if (cardInstance.isLiked()) {
+        api.dislikeCard(cardId)
+          .then((updatedCard) => cardInstance.setLikeState(updatedCard.isLiked))
+          .catch((err) => console.error("Error al quitar like:", err));
+      } else {
+        api.likeCard(cardId)
+          .then((updatedCard) => cardInstance.setLikeState(updatedCard.isLiked))
+          .catch((err) => console.error("Error al dar like:", err));
+      }
+    },
+    (cardInstance) => {
+      // Manejador de eliminación usando PopupWithConfirmation
+      confirmDeletePopup.setAction(() => {
+        confirmDeletePopup.renderLoading(true, "Eliminando...");
+        api.deleteCard(cardInstance.getId())
+          .then(() => {
+            cardInstance.removeCard();
+            confirmDeletePopup.close();
+          })
+          .catch((err) => console.error("Error al eliminar la tarjeta:", err))
+          .then(() => {
+            confirmDeletePopup.renderLoading(false);
+          });
+      });
+      confirmDeletePopup.open();
+    }
+  );
+  return card.generateCard();
+};
+
 // 4. Carga inicial optimizada con Promise.all
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, initialCards]) => {
-    userId = userData._id; // Guardamos el ID del usuario actual
+    userId = userData._id;
 
     userInfo.setUserInfo({
       name: userData.name,
       about: userData.about
     });
 
-    // Si tuvieras un elemento para el avatar en el HTML, podrías actualizarlo aquí también:
     const avatarElement = document.querySelector(".profile__image") as HTMLImageElement;
     if (avatarElement) {
       avatarElement.src = userData.avatar;
@@ -53,35 +96,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
     cardSection = new Section<CardData>({
       items: initialCards,
       renderer: (item) => {
-        const card = new Card(
-          item,
-          userId,
-          "#card-template",
-          handleCardClick,
-          (cardInstance) => {
-            // Manejador de Like / Dislike
-            const cardId = cardInstance.getId();
-            if (cardInstance.isLiked()) {
-              api.dislikeCard(cardId)
-                .then((updatedCard) => cardInstance.setLikeState(updatedCard.isLiked))
-                .catch((err) => console.error("Error al quitar like:", err));
-            } else {
-              api.likeCard(cardId)
-                .then((updatedCard) => cardInstance.setLikeState(updatedCard.isLiked))
-                .catch((err) => console.error("Error al dar like:", err));
-            }
-          },
-          (cardInstance) => {
-            // Manejador de eliminación de tarjeta
-            const cardId = cardInstance.getId();
-            if (confirm("¿Estás seguro de que quieres eliminar esta tarjeta?")) {
-              api.deleteCard(cardId)
-                .then(() => cardInstance.removeCard())
-                .catch((err) => console.error("Error al eliminar la tarjeta:", err));
-            }
-          }
-        );
-        const cardElement = card.generateCard();
+        const cardElement = createCard(item);
         cardSection.addItem(cardElement);
       }
     }, ".elements");
@@ -123,33 +138,9 @@ const addCardPopup = new PopupWithForm("#add-card-popup", (formData) => {
     link: formData.link
   })
     .then((newCardData) => {
-      const card = new Card(
-        newCardData,
-        userId,
-        "#card-template",
-        handleCardClick,
-        (cardInstance) => {
-          const cardId = cardInstance.getId();
-          if (cardInstance.isLiked()) {
-            api.dislikeCard(cardId)
-              .then((updatedCard) => cardInstance.setLikeState(updatedCard.isLiked))
-              .catch((err) => console.error("Error al quitar like:", err));
-          } else {
-            api.likeCard(cardId)
-              .then((updatedCard) => cardInstance.setLikeState(updatedCard.isLiked))
-              .catch((err) => console.error("Error al dar like:", err));
-          }
-        },
-        (cardInstance) => {
-          if (confirm("¿Estás seguro de que quieres eliminar esta tarjeta?")) {
-            api.deleteCard(cardInstance.getId())
-              .then(() => cardInstance.removeCard())
-              .catch((err) => console.error("Error al eliminar la tarjeta:", err));
-          }
-        }
-      );
+      const cardElement = createCard(newCardData);
       if (cardSection) {
-        cardSection.addItem(card.generateCard());
+        cardSection.addItem(cardElement);
       }
       addCardPopup.close();
     })
@@ -162,18 +153,37 @@ const addCardPopup = new PopupWithForm("#add-card-popup", (formData) => {
 });
 addCardPopup.setEventListeners();
 
-// 7. Validación de formularios
+// 7. Popup de actualizar avatar
+const avatarPopup = new PopupWithForm("#avatar-popup", (formData) => {
+  avatarPopup.renderLoading(true, "Guardando...");
+  api.updateAvatar(formData.avatar)
+    .then((userData) => {
+      const avatarElement = document.querySelector(".profile__image") as HTMLImageElement;
+      if (avatarElement) {
+        avatarElement.src = userData.avatar;
+      }
+      avatarPopup.close();
+    })
+    .catch((err) => {
+      console.error("Error al actualizar el avatar:", err);
+    })
+    .then(() => {
+      avatarPopup.renderLoading(false);
+    });
+});
+avatarPopup.setEventListeners();
+
+// 8. Validación de formularios
 const forms = Array.from(document.querySelectorAll(".popup__form")) as HTMLFormElement[];
 forms.forEach((formElement) => {
   const formValidator = new FormValidator(defaultFormConfig, formElement);
   formValidator.enableValidation();
 });
 
-// 8. Botones de apertura de modales
+// 9. Botones de apertura de modales
 const editProfileButton = document.querySelector(".profile__edit-button") as HTMLButtonElement;
 if (editProfileButton) {
   editProfileButton.addEventListener("click", () => {
-    // Opcional: precargar los inputs con los valores actuales del perfil
     const currentUser = userInfo.getUserInfo();
     const nameInput = document.querySelector(".popup__input_type_name") as HTMLInputElement;
     const aboutInput = document.querySelector(".popup__input_type_description") as HTMLInputElement;
@@ -191,26 +201,6 @@ if (addCardButton) {
     addCardPopup.open();
   });
 }
-
-const avatarPopup = new PopupWithForm("#avatar-popup", (formData) => {
-  avatarPopup.renderLoading(true, "Guardando...");
-  api.updateAvatar(formData.avatar)
-    .then((userData) => {
-      // Actualizamos la imagen en el DOM con la respuesta del servidor
-      const avatarElement = document.querySelector(".profile__image") as HTMLImageElement;
-      if (avatarElement) {
-        avatarElement.src = userData.avatar;
-      }
-      avatarPopup.close();
-    })
-    .catch((err) => {
-      console.error("Error al actualizar el avatar:", err);
-    })
-    .then(() => {
-      avatarPopup.renderLoading(false);
-    });
-});
-avatarPopup.setEventListeners();
 
 const profileImageContainer = document.querySelector(".profile__image") as HTMLElement;
 if (profileImageContainer) {

@@ -56,9 +56,9 @@ export class Card {
   public setLikeState(isLiked: boolean): void {
     this._isLiked = isLiked;
     if (this._isLiked) {
-      this._likeButton.classList.add("card__like-button_active");
+      this._likeButton.classList.add("card__like-button_is-active");
     } else {
-      this._likeButton.classList.remove("card__like-button_active");
+      this._likeButton.classList.remove("card__like-button_is-active");
     }
   }
 
